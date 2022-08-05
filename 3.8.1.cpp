@@ -1,18 +1,23 @@
 ﻿#include <iostream>
 using namespace std;
 
-class bad_lenght : public std::exception
+class bad_lenght : public exception
 {
 public:
-    const char* what() const override { return "Вы ввели слово запретной длины! До свидания!"; }
+    bad_lenght(string error) {
+        cerr << "Вы ввели слово запретной длины! Длина запретное слово равно ";
+        cerr << error.length()<<". И это слово: "<<error;
+        cerr << ". До свидания!\n";
+    }
 };
 
 int function(string str, int forbidden_lenght) {
-    
-    if (str.length() == forbidden_lenght) {
-        throw bad_lenght();
+    while (true) {
+        if (str.length() == forbidden_lenght) {
+            throw bad_lenght (str); 
+        }
+        else return str.length();
     }
-    else return str.length();
 }
 
 int main()
@@ -25,13 +30,15 @@ int main()
     while (str.length() != a) {
         cout << "Введите слово: ";
         cin >> str;
-        try{
-        function(str, a);
+        try {
+            function(str, a);
         }
         catch (bad_lenght& e) {
-            cout << e.what(); continue;
-        }
+            continue;
+        };
+
         cout << "Длина слова " << str << " равна " << str.length() << endl;
     }
+    
     return 0;
 }
